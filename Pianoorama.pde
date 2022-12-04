@@ -1,11 +1,8 @@
 import g4p_controls.*;
 
 
-
-String[] compositions = {"blank.png", "never gonna give you up.png", "river flows in you.png"};
+String[] compositions = {"blank.png", "never gonna give you up.png", "pokemon theme.png"};
 int chosenComp;
-
-PImage img = loadImage(compositions[chosenComp]);
 
 
 void setup(){
@@ -15,5 +12,6 @@ void setup(){
 }
 
 void draw(){
+  PImage img = loadImage(compositions[chosenComp]);
   image(img, 0, 0);
 }
