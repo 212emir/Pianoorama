@@ -14,13 +14,68 @@
  * =========================================================
  */
 
-synchronized public void win_draw2(PApplet appc, GWinData data) { //_CODE_:window3:407295:
+synchronized public void win_draw1(PApplet appc, GWinData data) { //_CODE_:window1:511029:
   appc.background(230);
-} //_CODE_:window3:407295:
+} //_CODE_:window1:511029:
 
-public void compDropListSelected(GDropList source, GEvent event) { //_CODE_:compDropList:419589:
-  chosenComp = compDropList.getSelectedIndex();
-} //_CODE_:compDropList:419589:
+public void backgroundlistclicked(GDropList source, GEvent event) { //_CODE_:backgroundlist:604598:
+  println("backgroundlist - GDropList >> GEvent." + event + " @ " + millis());
+  backgroundimage = backgroundlist.getSelectedText() + "stage.png";
+  background = loadImage(backgroundimage);
+  background.resize(1000,1000);
+} //_CODE_:backgroundlist:604598:
+
+public void volumesliderratio(GCustomSlider source, GEvent event) { //_CODE_:volumeslider:228278:
+  println("volumeslider - GCustomSlider >> GEvent." + event + " @ " + millis());
+  Volume = volumeslider.getValueF();
+} //_CODE_:volumeslider:228278:
+
+public void crazybuttonpressed(GButton source, GEvent event) { //_CODE_:crazybutton:783815:
+  println("crazybutton - GButton >> GEvent." + event + " @ " + millis());
+  randomsheet = int(random(1,3));
+  chosenComp = randomsheet;
+  randomoctave = int(random(3,7));
+  octave = randomoctave;
+  randombackground = int(random(0,4));
+  if (randombackground == 0){
+    background = loadImage("defaultstage.png"); 
+    background.resize(1000,1000);
+  }
+  else if (randombackground == 1){
+    background = loadImage("specialstage.png"); 
+    background.resize(1000,1000);
+  }
+  else if (randombackground == 2) {
+    background = loadImage("schoolstage.png");
+    background.resize(1000,1000);
+  }
+  else if (randombackground == 3){
+   background = loadImage("beachstage.png"); 
+   background.resize(1000,1000);
+  }
+} //_CODE_:crazybutton:783815:
+
+public void metronomelistclicked(GDropList source, GEvent event) { //_CODE_:metronomelist:459815:
+  println("metronomelist - GDropList >> GEvent." + event + " @ " + millis());
+  
+  metronomespeed = metronomelist.getSelectedIndex();
+  if (metronomespeed == 1)
+    istheremetronome = true; 
+   // metronomecolour = ();
+  
+  print(metronomespeed);
+} //_CODE_:metronomelist:459815:
+
+public void octavelistclicked(GDropList source, GEvent event) { //_CODE_:octavelist:497992:
+  println("octavelist - GDropList >> GEvent." + event + " @ " + millis());
+  octave = octavelist.getSelectedIndex() + 1;
+  println(octave);
+} //_CODE_:octavelist:497992:
+
+public void currentsheetclicked1(GDropList source, GEvent event) { //_CODE_:currentsheet1:679919:
+  println("currentsheet1 - GDropList >> GEvent." + event + " @ " + millis());
+  chosenComp = currentsheet1.getSelectedIndex();
+} //_CODE_:currentsheet1:679919:
 
 
 
@@ -31,18 +86,75 @@ public void createGUI(){
   G4P.setGlobalColorScheme(GCScheme.BLUE_SCHEME);
   G4P.setMouseOverEnabled(false);
   surface.setTitle("Sketch Window");
-  window3 = GWindow.getWindow(this, "Window title", 0, 0, 240, 120, JAVA2D);
-  window3.noLoop();
-  window3.setActionOnClose(G4P.KEEP_OPEN);
-  window3.addDrawHandler(this, "win_draw2");
-  compDropList = new GDropList(window3, 48, 20, 140, 80, 3, 10);
-  compDropList.setItems(loadStrings("list_419589"), 0);
-  compDropList.setLocalColorScheme(GCScheme.PURPLE_SCHEME);
-  compDropList.addEventHandler(this, "compDropListSelected");
-  window3.loop();
+  window1 = GWindow.getWindow(this, "Pianoorama GUI", 0, 0, 350, 300, JAVA2D);
+  window1.noLoop();
+  window1.setActionOnClose(G4P.KEEP_OPEN);
+  window1.addDrawHandler(this, "win_draw1");
+  backgroundlist = new GDropList(window1, 6, 32, 90, 100, 4, 10);
+  backgroundlist.setItems(loadStrings("list_604598"), 0);
+  backgroundlist.setLocalColorScheme(GCScheme.RED_SCHEME);
+  backgroundlist.addEventHandler(this, "backgroundlistclicked");
+  backgroundlabel = new GLabel(window1, 11, 5, 80, 20);
+  backgroundlabel.setTextAlign(GAlign.CENTER, GAlign.MIDDLE);
+  backgroundlabel.setText("Backgrounds");
+  backgroundlabel.setLocalColorScheme(GCScheme.RED_SCHEME);
+  backgroundlabel.setOpaque(false);
+  volumeslider = new GCustomSlider(window1, 3, 89, 100, 40, "green_red20px");
+  volumeslider.setLimits(0.0, 0.0, 1.0);
+  volumeslider.setNumberFormat(G4P.DECIMAL, 0);
+  volumeslider.setOpaque(false);
+  volumeslider.addEventHandler(this, "volumesliderratio");
+  Volumelabel = new GLabel(window1, 9, 69, 80, 20);
+  Volumelabel.setTextAlign(GAlign.CENTER, GAlign.MIDDLE);
+  Volumelabel.setText("Volume");
+  Volumelabel.setOpaque(false);
+  crazybutton = new GButton(window1, 8, 170, 80, 30);
+  crazybutton.setText("Press");
+  crazybutton.addEventHandler(this, "crazybuttonpressed");
+  crazylabel = new GLabel(window1, 3, 143, 95, 20);
+  crazylabel.setTextAlign(GAlign.CENTER, GAlign.MIDDLE);
+  crazylabel.setText("Crazy Settings");
+  crazylabel.setOpaque(false);
+  metronomelist = new GDropList(window1, 156, 32, 90, 80, 3, 10);
+  metronomelist.setItems(loadStrings("list_459815"), 0);
+  metronomelist.addEventHandler(this, "metronomelistclicked");
+  metrolabel = new GLabel(window1, 158, 12, 80, 20);
+  metrolabel.setTextAlign(GAlign.CENTER, GAlign.MIDDLE);
+  metrolabel.setText("Metronome");
+  metrolabel.setOpaque(false);
+  octavelist = new GDropList(window1, 154, 93, 90, 80, 3, 10);
+  octavelist.setItems(loadStrings("list_497992"), 2);
+  octavelist.setLocalColorScheme(GCScheme.GREEN_SCHEME);
+  octavelist.addEventHandler(this, "octavelistclicked");
+  octavelabel = new GLabel(window1, 155, 71, 89, 20);
+  octavelabel.setTextAlign(GAlign.CENTER, GAlign.MIDDLE);
+  octavelabel.setText("Current Octave");
+  octavelabel.setLocalColorScheme(GCScheme.GREEN_SCHEME);
+  octavelabel.setOpaque(false);
+  currentsheet1 = new GDropList(window1, 154, 148, 90, 80, 3, 10);
+  currentsheet1.setItems(loadStrings("list_679919"), 0);
+  currentsheet1.setLocalColorScheme(GCScheme.PURPLE_SCHEME);
+  currentsheet1.addEventHandler(this, "currentsheetclicked1");
+  sheetlabel = new GLabel(window1, 157, 125, 80, 20);
+  sheetlabel.setTextAlign(GAlign.CENTER, GAlign.MIDDLE);
+  sheetlabel.setText("Current Sheet");
+  sheetlabel.setLocalColorScheme(GCScheme.PURPLE_SCHEME);
+  sheetlabel.setOpaque(false);
+  window1.loop();
 }
 
 // Variable declarations 
 // autogenerated do not edit
-GWindow window3;
-GDropList compDropList; 
+GWindow window1;
+GDropList backgroundlist; 
+GLabel backgroundlabel; 
+GCustomSlider volumeslider; 
+GLabel Volumelabel; 
+GButton crazybutton; 
+GLabel crazylabel; 
+GDropList metronomelist; 
+GLabel metrolabel; 
+GDropList octavelist; 
+GLabel octavelabel; 
+GDropList currentsheet1; 
+GLabel sheetlabel; 
